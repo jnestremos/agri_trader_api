@@ -5,6 +5,7 @@ use App\Http\Controllers\ProjectBidController;
 use App\Http\Controllers\FarmController;
 use App\Http\Controllers\FarmOwnerController;
 use App\Http\Controllers\FarmPartnerController;
+use App\Http\Controllers\OnHandBidController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -64,28 +65,53 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         });
 
         //Route::put('/bid/{id}', [ProjectBidController::class, 'approveProjectBid']);
-        Route::prefix('bid/{id}')->group(function () {
+        Route::prefix('bid/project/{id}')->group(function () {
             Route::controller(ProjectBidController::class)->group(function () {
                 Route::put('/approve', 'approveProjectBid');
+                Route::post('/payment', 'paymentProjectBid');
+                Route::put('/deliver', 'deliverProjectBid');
+            });
+        });
+        Route::prefix('bid/onhand/{id}')->group(function () {
+            Route::controller(OnHandBidController::class)->group(function () {
+                Route::put('/approve', 'approveOnHandBid');
                 Route::post('/payment', 'paymentProjectBid');
                 Route::put('/deliver', 'deliverProjectBid');
             });
         });
     });
+
+
     Route::group(['middleware' => ['role:distributor']], function () {
-        Route::prefix('distributor/order/project')->group(function () {
+        Route::prefix('bid/project')->group(function () {
             Route::controller(ProjectBidController::class)->group(function () {
                 Route::post('/add', 'addProjectBid');
             });
+            Route::prefix('/{id}')->group(function () {
+                Route::controller(ProjectBidController::class)->group(function () {
+                    Route::put('/approve', 'approveProjectBid');
+                    Route::post('/payment', 'paymentProjectBid');
+                    Route::put('/deliver', 'deliverProjectBid');
+                    //Route::post('/refund', 'refundProjectBid');              
+                });
+            }); 
         });
-        Route::prefix('bid/{id}')->group(function () {
-            Route::controller(ProjectBidController::class)->group(function () {
-                Route::put('/approve', 'approveProjectBid');
-                Route::post('/payment', 'paymentProjectBid');
-                Route::put('/deliver', 'deliverProjectBid');
-                //Route::post('/refund', 'refundProjectBid');              
+
+        Route::prefix('bid/onhand')->group(function (){
+            Route::controller(OnHandBidController::class)->group(function (){
+                Route::post('/add', 'addOnHandBid');
             });
+
+            Route::prefix('/{id}')->group(function () {
+                Route::controller(OnHandBidController::class)->group(function () {
+                    Route::put('/approve', 'approveOnHandBid');
+                    Route::post('/payment', 'paymentProjectBid');
+                    Route::put('/deliver', 'deliverProjectBid');
+                    //Route::post('/refund', 'refundProjectBid');              
+                });
+            }); 
         });
+               
     });
 });
 

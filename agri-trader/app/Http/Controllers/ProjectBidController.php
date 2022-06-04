@@ -14,8 +14,7 @@ class ProjectBidController extends Controller
     public function addProjectBid(Request $request)
     {
         $order = $request->validate([
-            'trader_id' => 'required',
-            'distributor_id' => 'required',
+            'trader_id' => 'required',            
             'project_id' => 'required',
             'order_dateNeededFrom' => 'required|date:after:now',
             'order_dateNeededTo' => 'required|date|after:order_dateNeededFrom',
@@ -33,12 +32,12 @@ class ProjectBidController extends Controller
 
         $newOrder = BidOrder::create([
             'trader_id' => $request->trader_id,
-            'distributor_id' => $request->distributor_id,
+            'distributor_id' => User::find(auth()->id())->distributor()->first()->id,
             'bid_order_status_id' => 1,
             'project_id' => $request->project_id,
             'order_dateNeededFrom' => $request->order_dateNeededFrom,
             'order_dateNeededTo' => $request->order_dateNeededTo,
-            'order_askingPrice' => $request->order_askingPrice
+            'order_initialPrice' => $request->order_initialPrice
         ]);
 
         ProjectBid::create([
@@ -99,10 +98,8 @@ class ProjectBidController extends Controller
         $user = User::find(auth()->id());
         if ($user->hasRole('distributor')) {
             $order = $request->validate([
-                'bid_order_acc_paymentMethod' => 'required',
-                'bid_order_acc_bankName' => 'required',
-                'bid_order_acc_accNum' => 'required',
-                'bid_order_acc_accName' => 'required',
+                'bid_order_acc_paymentMethod' => 'required|string',                
+                'bid_order_acc_type' => 'required|string',                
                 'bid_order_acc_amount' => 'required|numeric',
             ]);
 
@@ -177,10 +174,8 @@ class ProjectBidController extends Controller
             }
         } else { // when status is 5
             $order = $request->validate([
-                'bid_order_acc_paymentMethod' => 'required',
-                'bid_order_acc_bankName' => 'required',
-                'bid_order_acc_accNum' => 'required',
-                'bid_order_acc_accName' => 'required',
+                'bid_order_acc_paymentMethod' => 'required|string',                
+                'bid_order_acc_type' => 'required|string',                
                 'bid_order_acc_amount' => 'required|numeric',
             ]);
             if (!$order) {

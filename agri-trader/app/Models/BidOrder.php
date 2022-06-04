@@ -16,7 +16,7 @@ class BidOrder extends Model
         'bid_order_status_id',
         'order_dateNeededTo',
         'order_dateNeededFrom',
-        'order_askingPrice',
+        'order_initialPrice',
         'order_negotiatedPrice',
         'order_finalQty',
         'order_finalPrice',

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->foreignId('bid_order_id')->constrained('bid_orders')->onUpdate('cascade')->onDelete('cascade');
             $table->string('bid_order_acc_type');
             $table->string('bid_order_acc_paymentMethod');
-            $table->string('bid_order_acc_bankName');
-            $table->string('bid_order_acc_accNum');
-            $table->string('bid_order_acc_accName');
+            $table->string('bid_order_acc_bankName')->nullable();
+            $table->string('bid_order_acc_accNum')->nullable();
+            $table->string('bid_order_acc_accName')->nullable();
             $table->string('bid_order_acc_amount');
             $table->string('bid_order_acc_remarks')->nullable();
             $table->date('bid_order_acc_datePaid');

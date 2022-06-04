@@ -45,11 +45,11 @@ class User extends Authenticatable
     ];
     public function trader()
     {
-        return $this->hasOne(Trader::class, 'trader_id');
+        return $this->hasOne(Trader::class);
     }
     public function distributor()
     {
-        return $this->hasOne(Distributor::class, 'trader_id');
+        return $this->hasOne(Distributor::class);
     }
     public function farm_owner()
     {
