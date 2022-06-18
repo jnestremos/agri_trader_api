@@ -31,6 +31,10 @@ class Trader extends Model
     {
         return $this->belongsToMany(Produce::class, 'produce_trader', 'trader_id', 'produce_id');
     }
+    public function farm_owners()
+    {
+        return $this->belongsToMany(FarmOwner::class, 'owner_trader', 'trader_id', 'farm_owner_id');
+    }
     public function contract()
     {
         return $this->hasOne(Contract::class);

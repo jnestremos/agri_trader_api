@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FarmOwner;
 use App\Models\FarmOwnerAddress;
 use App\Models\FarmOwnerContactNumber;
+use App\Models\Trader;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
@@ -14,12 +15,12 @@ class FarmOwnerController extends Controller
     public function add(Request $request)
     {
         $user = $request->validate([
-            'firstName' => 'required|string|unique:farm_owners,owner_firstName',
-            'lastName' => 'required|string|unique:farm_owners,owner_lastName',
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
             'gender' => 'required|string',
-            'contactNum' => 'required|unique:farm_owner_contact_numbers,owner_contactNum',
+            'contactNum' => 'required|array',
             'birthDate' => 'required|date',
-            'email' => 'required|email|unique:farm_owners,owner_email|unique:users,email',
+            'email' => 'required|email',
             'province' => 'required|string',
             'address' => 'required|string',
             'zipcode' => 'required|string',
@@ -43,6 +44,10 @@ class FarmOwnerController extends Controller
             'owner_birthDate' => $request->birthDate,
             'owner_email' => $request->email,
         ]);
+
+        $trader = Trader::find(auth()->id());
+        $trader->farm_owners()->attach($farmOwner);
+
         FarmOwnerAddress::create([
             'farm_owner_id' => $farmOwner->id,
             'owner_province' => $request->province,

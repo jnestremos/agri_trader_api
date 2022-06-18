@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('farm_id')->constrained('farms')->onUpdate('cascade')->onDelete('cascade');
             $table->string('farm_province');
             $table->string('farm_address');
+            $table->string('farm_city');
             $table->string('farm_zipcode');
             $table->timestamps();
         });

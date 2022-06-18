@@ -9,7 +9,7 @@ class Farm extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['farm_owner_id', 'trader_id', 'farm_hectares', 'farm_titleNum', 'farm_imageUrl'];
+    protected $fillable = ['farm_owner_id', 'trader_id', 'farm_hectares', 'farm_titleNum', 'farm_imageUrl', 'farm_name'];
 
     public function farm_owner()
     {

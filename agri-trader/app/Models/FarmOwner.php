@@ -26,4 +26,8 @@ class FarmOwner extends Model
     {
         return $this->hasOne(FarmOwnerAddress::class);
     }
+    public function traders()
+    {
+        return $this->belongsToMany(Trader::class, 'owner_trader', 'farm_owner_id', 'trader_id');
+    }
 }

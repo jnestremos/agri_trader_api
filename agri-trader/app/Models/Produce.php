@@ -22,4 +22,8 @@ class Produce extends Model
     {
         return $this->hasMany(Contract::class);
     }
+    public function produce_yield()
+    {
+        return $this->hasMany(ProduceYield::class);
+    }
 }

@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('produce_trader', function (Blueprint $table) {
-            $table->foreignId('trader_id')->constrained('traders')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('produce_id')->constrained('produces')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('produce_numOfGrades')->nullable();
+        Schema::create('produce_inventories', function (Blueprint $table) {
+            $table->foreignId('produce_yield_id')->constrained('produce_yields')->onUpdate('cascade')->onDelete('cascade');
+            $table->double('produce_inventory_qtyOnHand');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('produce_trader');
+        Schema::dropIfExists('produce_inventories');
     }
 };

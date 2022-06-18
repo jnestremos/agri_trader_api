@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('farm_owner_id')->constrained('farm_owners')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('trader_id')->constrained('traders')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('farm_name');
             $table->double('farm_hectares');
             $table->string('farm_titleNum')->unique();
-            $table->string('farm_imageUrl');
+            $table->string('farm_imageUrl');            
             $table->timestamps();
         });
     }

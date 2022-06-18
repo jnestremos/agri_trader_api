@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('produce_trader', function (Blueprint $table) {
-            $table->foreignId('trader_id')->constrained('traders')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('produce_id')->constrained('produces')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('produce_numOfGrades')->nullable();
+        Schema::create('project_images', function (Blueprint $table) {
+            $table->foreignId('project_id')->constrained('projects')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('project_image_stage');
+            $table->string('project_image_path');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('produce_trader');
+        Schema::dropIfExists('project_images');
     }
 };

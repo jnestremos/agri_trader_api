@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             BananaSeeder::class,
             PineappleSeeder::class,
             MangoSeeder::class,
-            VegetableSeeder::class,
+            //VegetableSeeder::class,
             ProjectStatusSeeder::class,
             BidOrderStatusSeeder::class
         ]);

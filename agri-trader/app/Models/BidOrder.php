@@ -4,16 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BidOrder extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'trader_id',
         'distributor_id',
         'project_id',
         'bid_order_status_id',
+        'order_grade',
         'order_dateNeededTo',
         'order_dateNeededFrom',
         'order_initialPrice',
@@ -39,11 +41,11 @@ class BidOrder extends Model
     }
     public function project_bid()
     {
-        return $this->hasOne(ProjectBid::class, 'project_bid_id');
+        return $this->hasOne(ProjectBid::class);
     }
     public function on_hand_bid()
     {
-        return $this->hasOne(OnHandBid::class, 'on_hand_bid_id');
+        return $this->hasOne(OnHandBid::class);
     }
     public function bid_order_status()
     {
@@ -52,5 +54,17 @@ class BidOrder extends Model
     public function bid_order_account()
     {
         return $this->hasMany(BidOrderAccount::class, 'bid_order_account_id');
+    }
+    public function refund()
+    {
+        return $this->hasOne(Refund::class);
+    }
+    public function delivery()
+    {
+        return $this->belongsTo(Delivery::class, 'delivery_id');
+    }
+    public function sale()
+    {
+        return $this->hasMany(Sale::class, 'sale_id');
     }
 }

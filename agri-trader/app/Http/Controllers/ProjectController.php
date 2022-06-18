@@ -6,7 +6,9 @@ use App\Models\Contract;
 use App\Models\ContractShare;
 use App\Models\Farm;
 use App\Models\Project;
+use App\Models\ProjectImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
@@ -36,10 +38,11 @@ class ProjectController extends Controller
             'project_harvestableStart' => 'date',
             'project_harvestableEnd' => 'date',
         ]);
-
-        if (!$project) {
+        $result1 = DB::table('produce_trader')->where([['trader_id', '=', auth()->id()], ['produce_id', '=', $request->produce_id]])->first();
+        $result2 = DB::table('farm_produce')->where([['farm_id', '=', $request->farm_id], ['produce_id', '=', $request->produce_id]])->first();
+        if (!$project || !$result1 || !$result2) {
             return response([
-                'error' => 'Invalid creds!'
+                'error' => 'Unavailable Produce for that Farm!'
             ], 400);
         }
 
@@ -84,5 +87,45 @@ class ProjectController extends Controller
             'contract' => $contract,
             'share' => $share
         ]);
+    }
+    
+    public function addPictures(Request $request, $id){
+
+        if(Project::find($id)){
+            $pic = $request->validate([
+                'stage' => 'required|string',
+                //'image' => 'required|mimes:jpg,jpeg,png|max:5048|image',
+                'image' => 'required|string'
+            ]);
+    
+            if(!$pic){
+                return response([
+                    'error' => 'Invalid image!'
+                ], 400);
+            }
+
+            $fileNameWithExt = $request->file('image')->getClientOriginalName();
+            $fileName = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $fileNameToStore = $fileName . '_' . time() . '.' . $extension;
+            $request->file('image')->storeAs('public/project/progress_images', $fileNameToStore);
+
+            ProjectImage::create([
+                'project_id' => $id,
+                'project_image_stage' => $request->stage,
+                'project_image_path' => $fileNameToStore
+            ]);            
+
+            return response([
+                'message' => 'Image Added!'
+            ], 200);
+        }
+        else{
+            return response([
+                'error' => 'Project Not Found!'
+            ], 400);
+        }
+       
+
     }
 }

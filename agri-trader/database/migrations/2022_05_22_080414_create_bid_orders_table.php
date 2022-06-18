@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('distributor_id')->constrained('distributors')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('project_id')->constrained('projects')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('bid_order_status_id')->constrained('bid_order_statuses')->onUpdate('cascade')->onDelete('cascade');
+            $table->char('order_grade')->nullable();
             $table->date('order_dateNeededTo');
             $table->date('order_dateNeededFrom');
             $table->double('order_initialPrice');
@@ -28,6 +29,7 @@ return new class extends Migration
             $table->double('order_finalTotal')->nullable();
             $table->date('order_dpDueDate')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

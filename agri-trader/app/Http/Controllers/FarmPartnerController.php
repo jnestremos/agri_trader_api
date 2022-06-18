@@ -61,8 +61,8 @@ class FarmPartnerController extends Controller
     public function assignToFarm(Request $request)
     {
         $query = $request->validate([
-            'farm_id' => 'required',
-            'farm_partner_id' => 'required',
+            'farm_id' => 'required|exists:farms,id',
+            'farm_partner_id' => 'required|exists:farm_partners,id',
         ]);
 
         if (!$query) {

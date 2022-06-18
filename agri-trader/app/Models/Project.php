@@ -36,4 +36,15 @@ class Project extends Model
     {
         return $this->hasMany(BidOrder::class, 'bid_order_id');
     }
+    public function refund()
+    {
+        return $this->belongsTo(Refund::class, 'refund_id');
+    }
+    public function produce_yield()
+    {
+        return $this->hasOne(ProduceYield::class, 'produce_yield_id');
+    }
+    public function project_image(){
+        return $this->hasMany(ProjectImage::class);
+    }
 }
