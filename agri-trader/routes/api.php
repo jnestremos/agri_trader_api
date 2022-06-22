@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    Route::get('farm/images/{path}', function($fileName) {            
+        $path = public_path().'/storage/farms/'.$fileName;
+        return response()->download($path, 'Farm Image');        
+    });
+
     Route::group(['middleware' => ['role:trader']], function () {
 
         Route::get('/dashboard', function(){
@@ -56,6 +62,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
                 Trader::where('user_id',auth()->id())->first()->trader_lastName
             ], 200);
         });
+
+        
 
         Route::prefix('farm')->group(function () {
 
@@ -87,8 +95,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/details/{id}', function ($id){
                 return response([
                     'owner' => Farm::find($id)->farm_owner()->first(),
-                    'farm' => Farm::find($id),
-                    'produces' => DB::table('farm_produce')->where('farm_id', $id)->get()
+                    'farm' => Farm::find($id),                    
+                    'produces' => DB::table('farm_produce')->where('farm_id', $id)->get(),
+                    'farm_address' => DB::table('farm_addresses')->where('farm_id', $id)->first(),
+                    'farm_partners' =>DB::table('farm_to_farm_partner_assignment')->where('farm_id', $id)->get(),                    
                 ], 200);
             });
 
